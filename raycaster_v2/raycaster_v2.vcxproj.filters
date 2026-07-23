@@ -108,4 +108,198 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\enemy\enemy1_aim.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_front.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_shoot1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_shoot2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1_test.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1dead1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1dead2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1dead3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1dead4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1walk2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1walk1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1walk3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\enemy\enemy1walk4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\guns\pistol-1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\guns\pistol-2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\guns\pistol-3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\z.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\y.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\x.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\w.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\v.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\u.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\t.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\s.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\r.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\q.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\percent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\p.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\o.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\null.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\n.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\m.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\l.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\j.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\i.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\health.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\h.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\g.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\f.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\e.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\a.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\ammo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\b.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\c.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\d.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\hud\demo1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\items\medkit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\walls\wall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\walls\exit.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="textures\walls\door.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
