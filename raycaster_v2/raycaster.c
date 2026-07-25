@@ -46,24 +46,28 @@ void castEnemies(float dist) {
 					//printf("%f\n", correctAngle);
 
 					if (correctAngle < 7 * PI / 4 && correctAngle >= 5 * PI / 4) {
-						drawTexRect(e[i].enemyTexBack, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
+						e[i].currentTex = eTex[e[i].enemyType].enemyTexBack;
+						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
 					}
 					else if (correctAngle < PI / 4 || correctAngle >= 7 * PI / 4) {
-						drawTexRect(e[i].enemyTexLeft, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
+						e[i].currentTex = eTex[e[i].enemyType].enemyTexLeft;
+						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
 					}
 					else if (correctAngle < 3 * PI / 4 && correctAngle >= PI / 4) {
-						drawTexRect(e[i].enemyTexFront, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
+						e[i].currentTex = eTex[e[i].enemyType].enemyTexFront;
+						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
 					}
 					else if (correctAngle < 5 * PI / 4 && correctAngle >= 3 * PI / 4) {
-						drawTexRect(e[i].enemyTexRight, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
+						e[i].currentTex = eTex[e[i].enemyType].enemyTexRight;
+						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
 					}
 				}
 				else { //if enemy is dead
-					if (e[i].enemyTexFront == e[i].enemyDead4) {
+					if (e[i].currentTex == eTex[e[i].enemyType].enemyDead4) {
 						e[i].enemyY1 = SCREEN_HEIGHT / 2;
 						e[i].enemyY2 = (SCREEN_HEIGHT / 2) + (((SCREEN_HEIGHT) / e[i].distToPlayer) * 7);
 					}
-					drawTexRect(e[i].enemyTexFront, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2 * 1.2, e[i].enemyY1, e[i].enemyY2);
+					drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2 * 1.2, e[i].enemyY1, e[i].enemyY2);
 				}
 			}
 		}
@@ -90,7 +94,16 @@ void castRays() {
 	}
 
 	//quick shading
-	if (correctDist >= 75) {
+	if (correctDist > 125) {
+		glColor3f(0.3, 0.3, 0.3);
+	}
+	else if (correctDist >= 100 && correctDist < 125) {
+		glColor3f(0.4, 0.4, 0.4);
+	}
+	else if (correctDist >= 87 && correctDist < 100) {
+		glColor3f(0.5, 0.5, 0.5);
+	}
+	else if (correctDist >= 75 && correctDist < 87) {
 		glColor3f(0.6, 0.6, 0.6);
 	}
 	else if (correctDist >= 62 && correctDist < 75) {
@@ -107,7 +120,7 @@ void castRays() {
 		drawTexRect(w.wallTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
 	}
 	else if (map[posToTileY][posToTileX] == 2 || map[posToTileY][posToTileX] == 3) {
-		drawTexRect(d.doorTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
+		drawTexRect(doorTex, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
 	}
 	else if (map[posToTileY][posToTileX] == 4) {
 		drawTexRect(w.exitTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);

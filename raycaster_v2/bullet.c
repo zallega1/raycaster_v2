@@ -2,8 +2,8 @@
 
 struct Bullet b;
 
-void fireBullet(float deltaTime) {
-	if (g.weapon == 1) {
+void fireBullet(float deltaTime, int weapon) {
+	if (weapon == 1) {
 		b.speed = 5 * deltaTime;
 	}
 	b.hitEnemy = false;
@@ -30,7 +30,8 @@ void fireBullet(float deltaTime) {
 			if (b.bX <= e[i].eX + 2 && b.bX >= e[i].eX - 2) {
 				if (b.bY >= e[i].eY - 2 && b.bY <= e[i].eY + 2) {
 					//printf("enemy hit\n");
-					enemyTakeDamage(i);
+					//weapon type is carried over through functions to prevent damage to enemy from changing if player switches weapons while bullet is moving
+					enemyTakeDamage(i, weapon);
 				}
 			}
 		}

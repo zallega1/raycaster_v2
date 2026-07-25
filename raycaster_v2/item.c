@@ -1,6 +1,6 @@
 #include "item.h"
 
-struct Item it[30];
+struct Item it[MAX_ITEMS];
 int numberOfItems;
 
 /* ITEM TYPES

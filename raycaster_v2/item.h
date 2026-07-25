@@ -9,6 +9,8 @@
 #include "map.h"
 #include "gun.h"
 
+#define MAX_ITEMS 30
+
 struct Item {
 	bool rendered, pickedUp; 
 	GLuint itemTexture;
@@ -16,8 +18,8 @@ struct Item {
 	int itemType, index;
 	float itemX1, itemX2, itemY1, itemY2; //for raycasting
 };
-extern struct Item it[30];
-extern int numberOfItems;
+struct Item it[MAX_ITEMS];
+int numberOfItems;
 
 //initializes the items for each level
 void initItems();
