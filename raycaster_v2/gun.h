@@ -14,13 +14,20 @@
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 1200
 
+#define GUN_ARR_SIZE 3
+
 struct Gun {
 	int gunX, gunY, gunW, gunH, gunXOffset, gunYOffset; //x and y coordinates of weapon on screen, also width and height of image
-	GLuint gunTexture, gunTexture2, gunTexture3;
+	GLuint currentTex;
 	int weapon, ammo; //integer corresponds to type of weapon, also ammo count
 	bool isFired; //boolean determining whether gun is being fired
 };
-extern struct Gun g;
+struct Gun g;
+
+struct GunTex {
+	GLuint gunTexture, gunTexture2, gunTexture3;
+};
+struct GunTex gTex[GUN_ARR_SIZE];
 
 //initialize the weapon
 void initWeapon();
@@ -33,5 +40,8 @@ void sway();
 
 //fires the weapon
 void fireGun(float deltaTime);
+
+//function that loads gun textures on level initialization
+void loadGunTex(int num);
 
 #endif

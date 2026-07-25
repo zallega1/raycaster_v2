@@ -43,10 +43,6 @@ bool checkCollision(float x, float y) {
 			int x1 = collX * cellSize;
 			int x2 = x1 + cellSize;
 			int xC = (x1 + x2) / 2;
-			d.inRange = true;
-			d.dTileX = collX;
-			d.dTileY = collY;
-			d.type = 2; //vertical door code
 			if (x >= xC - 2 && x <= xC + 2) {
 				return true;
 			}
@@ -55,10 +51,6 @@ bool checkCollision(float x, float y) {
 			int y1 = collY * cellSize;
 			int y2 = y1 + cellSize;
 			int yC = (y1 + y2) / 2;
-			d.inRange = true;
-			d.dTileX = collX;
-			d.dTileY = collY;
-			d.type = 3; //horizontal door code
 			if (y >= yC - 2 && y <= yC + 2) {
 				return true;
 			}
@@ -68,8 +60,15 @@ bool checkCollision(float x, float y) {
 			return true;
 		}
 	}
-	else {
-		d.inRange = false;
+
+	//check if door is in range after checking collision
+	for (int i = 0; i < numberOfDoors; i++) { 
+		if (d[i].dTileX == collX && d[i].dTileY == collY) {
+			d[i].inRange = true;
+		}
+		else {
+			d[i].inRange = false;
+		}
 	}
 	//collison checking for enemies
 	for (int i = 0; i < numberOfEnemies; i++) {
@@ -84,12 +83,22 @@ bool checkCollision(float x, float y) {
 	return false;
 }
 
-void damagePlayer() {
-	if (p.health - 25 <= 0) {
+void damagePlayer(int enemyType) {
+	int damage; //damage depends on enemy type, with random multiplier
+
+	switch (enemyType) {
+	case 0:
+	case 1:
+		damage = 15 * ((rand() % 3 - 1 + 1) + 1);
+		break;
+	case 2:
+		//will finish later
+		break;
+	}
+
+	p.health -= damage;
+	if (p.health <= 0) {
 		p.health = 0;
 		p.state = 1; //player dead state
-	}
-	else {
-		p.health -= 25;
 	}
 }

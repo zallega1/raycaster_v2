@@ -11,6 +11,8 @@
 
 #define PI 3.14159
 
+#define ENEMY_ARR_SIZE 3
+
 struct Enemy {
 	float time; //variable for deltaTime
 	float eX, eY, edX, edY;
@@ -19,9 +21,7 @@ struct Enemy {
 	int enemyType; //what kind of enemy is it?
 	int index; //gets ray that hits the enemy for positioning on screen
 	float distToPlayer, enemyAngle; //used for enemy movement
-	GLuint enemyTexFront, enemyTexBack, enemyTexLeft, enemyTexRight;
-	GLuint enemyShoot1, enemyShoot2, enemyWalk1, enemyWalk2, enemyWalk3, enemyWalk4;
-	GLuint enemyDead1, enemyDead2, enemyDead3, enemyDead4;
+	GLuint currentTex; //current enemy texture being displayed on screen
 	float enemyX1, enemyX2, enemyY1, enemyY2; //for raycasting
 	float angleFacingPlayer; //determines which sprite is loaded in
 	bool rendered; //is enemy rendered on screen?
@@ -33,9 +33,16 @@ struct Enemy {
 	float eBX, eBY; //bullet x and y coordinates
 	bool hitPlayer; //did enemy bullet hit player?
 };
-extern struct Enemy e[10];
+struct Enemy e[10];
 
-extern int numberOfEnemies;
+struct EnemyTex {
+	GLuint enemyTexFront, enemyTexBack, enemyTexLeft, enemyTexRight;
+	GLuint enemyShoot1, enemyShoot2, enemyWalk1, enemyWalk2, enemyWalk3, enemyWalk4;
+	GLuint enemyDead1, enemyDead2, enemyDead3, enemyDead4;
+};
+struct EnemyTex eTex[3];
+
+int numberOfEnemies;
 
 
 //initialize the enemy for each level
@@ -70,6 +77,9 @@ void enemyShoot(int num);
 void animateDeath(int num);
 
 //for when enemy takes damage
-void enemyTakeDamage(int num);
+void enemyTakeDamage(int num, int playerWeapon);
+
+//function that loads enemy textures on level initialization
+void loadEnemyTex(int num);
 
 #endif

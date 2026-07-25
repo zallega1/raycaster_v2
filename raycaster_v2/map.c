@@ -1,10 +1,10 @@
 #include "map.h"
 #include "draw.h"
 
-int cellSize, yTiles, xTiles; //make sure this matches the .h
+int cellSize;
 int level; //keeps track of level
 
-int map[32][32] =
+int map[Y_TILES][X_TILES] =
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -17,9 +17,9 @@ int map[32][32] =
 	{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0},
@@ -43,17 +43,19 @@ int map[32][32] =
 void initMap() {
 	cellSize = 16;
 	level = 1;
+	for (int i = 0; i < numberOfDoors; i++) {
+		if (map[d[i].dTileY][d[i].dTileX] == 0) {
+			map[d[i].dTileY][d[i].dTileX] = d[i].type;
+		}
+	}
 }
 
 void drawMap() {
-	yTiles = 32;
-	xTiles = 32;
-
 	int x, y, x1, y1, x2, y2, xC, yC;
-	for (y = 0; y < yTiles; y++) {
-		for (x = 0; x < xTiles; x++) {
+	for (y = 0; y < Y_TILES; y++) {
+		for (x = 0; x < X_TILES; x++) {
 			x1 = x * cellSize + 1; //+1 and -1 are just there to give it the grid pattern
-			x2 = x1 + cellSize - 1; //8 is the number we're using to scale the minimap to the top corner
+			x2 = x1 + cellSize - 1; //16 is the number we're using to scale the minimap to the top corner
 			y1 = y * cellSize + 1;
 			y2 = y1 + cellSize - 1;
 			xC = (x1 + x2) / 2; //xC and yC are for doors, since they are more narrow than walls

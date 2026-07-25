@@ -2,15 +2,19 @@
 #define MAP_H
 
 #include <GLFW/glfw3.h>
+#include "door.h"
+
+#define X_TILES 32
+#define Y_TILES 32
 
 //cellSize is used by multiple different functions when doing calculations
-extern int cellSize;
+int cellSize;
 
 //level keeps track of the current level
-extern int level;
+int level;
 
 //2D array for map, fixed size for now
-extern int map[32][32];
+int map[Y_TILES][X_TILES];
 
 //initialize the level
 void initMap();

@@ -19,11 +19,11 @@ struct Player {
 	int health;
 	int state; //0 while alive, 1 when dead
 };
-extern struct Player p; //create player character globally
+struct Player p; //create player character globally
 
 void initPlayer(); //initialize player health, spawn, etc
 void drawPlayer(); //draw player on 2D map
 bool checkCollision(float x, float y); //check collision of player
-void damagePlayer(); //for when player takes damage
+void damagePlayer(int enemyType); //for when player takes damage
 
 #endif

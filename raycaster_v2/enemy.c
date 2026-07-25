@@ -1,11 +1,41 @@
 #include "enemy.h"
 
 struct Enemy e[10];
+struct EnemyTex eTex[3];
 int numberOfEnemies;
 int enemyKills;
 
+void loadEnemyTex(int num) {
+	switch (num) {
+	case 0:
+	case 1:
+		eTex[num].enemyTexFront = loadTexture("textures/enemy/enemy1_front.png");
+		eTex[num].enemyTexBack = loadTexture("textures/enemy/enemy1_back.png");
+		eTex[num].enemyTexLeft = loadTexture("textures/enemy/enemy1_left.png");
+		eTex[num].enemyTexRight = loadTexture("textures/enemy/enemy1_right.png");
+		eTex[num].enemyDead1 = loadTexture("textures/enemy/enemy1dead1.png");
+		eTex[num].enemyDead2 = loadTexture("textures/enemy/enemy1dead2.png");
+		eTex[num].enemyDead3 = loadTexture("textures/enemy/enemy1dead3.png");
+		eTex[num].enemyDead4 = loadTexture("textures/enemy/enemy1dead4.png");
+		eTex[num].enemyShoot1 = loadTexture("textures/enemy/enemy1_shoot1.png");
+		eTex[num].enemyShoot2 = loadTexture("textures/enemy/enemy1_shoot2.png");
+		eTex[num].enemyWalk1 = loadTexture("textures/enemy/enemy1walk1.png");
+		eTex[num].enemyWalk2 = loadTexture("textures/enemy/enemy1walk2.png");
+		eTex[num].enemyWalk3 = loadTexture("textures/enemy/enemy1walk3.png");
+		eTex[num].enemyWalk4 = loadTexture("textures/enemy/enemy1walk4.png");
+		break;
+	case 2:
+		//will add later
+		break;
+	}
+}
+
 void initEnemies() {
 	numberOfEnemies = 0; //reset counter to zero
+	for (int i = 1; i < ENEMY_ARR_SIZE; i++) {
+		loadEnemyTex(i);
+	}
+
 	if (level == 1) {
 		createEnemy(200, 50, 1, numberOfEnemies, -PI);
 		createEnemy(230, 300, 1, numberOfEnemies, -PI/2);
@@ -28,22 +58,31 @@ void animateDeath(int num) {
 	float elapsedTime = glfwGetTime() - t;
 
 	if (elapsedTime < 0.1) {
-		e[num].enemyTexFront = e[num].enemyDead1;
+		e[num].currentTex = eTex[e[num].enemyType].enemyDead1;
 	}
 	else if (elapsedTime < 0.2) {
-		e[num].enemyTexFront = e[num].enemyDead2;
+		e[num].currentTex = eTex[e[num].enemyType].enemyDead2;
 	}
 	else if (elapsedTime < 0.3) {
-		e[num].enemyTexFront = e[num].enemyDead3;
+		e[num].currentTex = eTex[e[num].enemyType].enemyDead3;
 	}
 	else {
-		e[num].enemyTexFront = e[num].enemyDead4;
+		e[num].currentTex = eTex[e[num].enemyType].enemyDead4;
 		t = 0;
 	}
 }
 
-void enemyTakeDamage(int num) {
-	e[num].enemyHealth -= 50;
+void enemyTakeDamage(int num, int playerWeapon) {
+	switch (playerWeapon) {
+	case 0:
+	case 1:
+		e[num].enemyHealth -= 50;
+		break;
+	case 2:
+		//will finish later
+		break;
+	}
+
 	if (e[num].enemyHealth <= 0) { //no negative health values
 		e[num].enemyHealth = 0; //set to 0
 		if (e[num].enemyState != 3) {
@@ -80,10 +119,10 @@ void enemyShoot(int num) {
 	float elapsedTime = glfwGetTime() - t;
 
 	if (elapsedTime < 0.15) {
-		e[num].enemyTexFront = e[num].enemyShoot1;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyShoot1;
 	}
 	else if (elapsedTime < 0.3) {
-		e[num].enemyTexFront = e[num].enemyShoot2;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyShoot2;
 	}
 	else {
 		//fire the bullet
@@ -113,7 +152,7 @@ void enemyShoot(int num) {
 					e[num].hitPlayer = true;
 					e[num].eBX = -100; //move bullet offscreen
 					e[num].eBY = -100;
-					damagePlayer();
+					damagePlayer(e[num].enemyType);
 				}
 			}
 		}
@@ -264,16 +303,16 @@ void animateWalk(int num) {
 	float elapsedTime = glfwGetTime() - t;
 
 	if (elapsedTime < 0.3) {
-		e[num].enemyTexFront = e[num].enemyWalk1;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyWalk1;
 	}
 	else if (elapsedTime < 0.6) {
-		e[num].enemyTexFront = e[num].enemyWalk2;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyWalk2;
 	}
 	else if (elapsedTime < 0.9) {
-		e[num].enemyTexFront = e[num].enemyWalk3;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyWalk3;
 	}
 	else {
-		e[num].enemyTexFront = e[num].enemyWalk4;
+		eTex[e[num].enemyType].enemyTexFront = eTex[e[num].enemyType].enemyWalk4;
 		t = 0;
 	}
 }
@@ -331,7 +370,7 @@ void enemyAI(int num) {
 		enemyShoot(num);
 	}
 	else if (e[num].enemyState == 3) {
-		if (e[num].enemyTexFront != e[num].enemyDead4) {
+		if (e[num].currentTex != eTex[e[num].enemyType].enemyDead4) {
 			animateDeath(num);
 		}
 	}
@@ -348,22 +387,6 @@ void createEnemy(float enemyX, float enemyY, int type, int num, float angle) {
 	e[num].enemyState = 0;
 	e[num].eBX = -100; //move bullet offscreen
 	e[num].eBY = -100;
-	if (e[num].enemyType == 1) {
-		e[num].enemyTexFront = loadTexture("textures/enemy/enemy1_front.png");
-		e[num].enemyTexBack = loadTexture("textures/enemy/enemy1_back.png");
-		e[num].enemyTexLeft = loadTexture("textures/enemy/enemy1_left.png");
-		e[num].enemyTexRight = loadTexture("textures/enemy/enemy1_right.png");
-		e[num].enemyDead1 = loadTexture("textures/enemy/enemy1dead1.png");
-		e[num].enemyDead2 = loadTexture("textures/enemy/enemy1dead2.png");
-		e[num].enemyDead3 = loadTexture("textures/enemy/enemy1dead3.png");
-		e[num].enemyDead4 = loadTexture("textures/enemy/enemy1dead4.png");
-		e[num].enemyShoot1 = loadTexture("textures/enemy/enemy1_shoot1.png");
-		e[num].enemyShoot2 = loadTexture("textures/enemy/enemy1_shoot2.png");
-		e[num].enemyWalk1 = loadTexture("textures/enemy/enemy1walk1.png");
-		e[num].enemyWalk2 = loadTexture("textures/enemy/enemy1walk2.png");
-		e[num].enemyWalk3 = loadTexture("textures/enemy/enemy1walk3.png");
-		e[num].enemyWalk4 = loadTexture("textures/enemy/enemy1walk4.png");
-	}
 	numberOfEnemies += 1; //increment by one for each enemy created
 }
 

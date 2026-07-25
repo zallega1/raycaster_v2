@@ -13,8 +13,8 @@ struct Bullet {
 	float speed;
 	bool hitEnemy;
 };
-extern struct Bullet b;
+struct Bullet b;
 
-void fireBullet(float deltaTime);
+void fireBullet(float deltaTime, int weapon);
 
 #endif

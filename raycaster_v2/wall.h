@@ -9,6 +9,6 @@ struct Wall {
 	GLuint wallTexture, exitTexture;
 	float texX1, texX2, texY1, texY2; //for texture mapping
 };
-extern struct Wall w;
+struct Wall w;
 
 #endif

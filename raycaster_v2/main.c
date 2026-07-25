@@ -110,9 +110,9 @@ void display() { //display the graphics
             initWeapon();
             initEnemies();
             initItems();
+            initDoors();
             w.wallTexture = loadTexture("textures/walls/wall.png");
             w.exitTexture = loadTexture("textures/walls/exit.png");
-            d.doorTexture = loadTexture("textures/walls/door.png");
             drawWeapon(1);
             levelInit = true;
         }
@@ -160,9 +160,11 @@ void display() { //display the graphics
                 }
             }
             if (k.e == 1) {
-                if (d.inRange == true) {
-                    d.isOpened = true;
-                    openDoor(d.dTileX, d.dTileY, d.type);
+                for (int i = 0; i < numberOfDoors; i++) {
+                    if (d[i].inRange == true) {
+                        d[i].isOpened = true;
+                        openDoor(i);
+                    }
                 }
             }
             if (k.space == 1 && g.isFired == false && g.ammo != 0) {
@@ -181,8 +183,13 @@ void display() { //display the graphics
             drawHUD();
 
             //check if door is open so it can be closed
-            if (d.isOpened == true) {
-                openDoor(d.dTileX, d.dTileY, d.type);
+            for (int i = 0; i < numberOfDoors; i++) {
+                if (d[i].inRange == true && d[i].isOpened == false) {
+                    drawText("E to open", SCREEN_WIDTH * 0.25, SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5, SCREEN_HEIGHT * 0.625);
+                }
+                if (d[i].isOpened == true) {
+                    openDoor(i);
+                }
             }
             if (g.isFired == true) {
                 fireGun(deltaTime);
@@ -209,8 +216,8 @@ void display() { //display the graphics
                 initWeapon();
                 initEnemies();
                 initItems();
+                initDoors();
                 w.wallTexture = loadTexture("textures/walls/wall.png");
-                d.doorTexture = loadTexture("textures/walls/door.png");
                 drawWeapon(1);
                 p.state = 0;
             }
@@ -305,7 +312,7 @@ int main(void){
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raycaster v2", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "untitled FPS game", NULL, NULL);
     if (!window)
     {
         glfwTerminate();

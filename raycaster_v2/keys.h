@@ -5,6 +5,6 @@
 struct Keys {
 	int w, a, s, d, space, e, p, up, down, left, right, enter, esc;
 };
-extern struct Keys k;
+struct Keys k;
 
 #endif
