@@ -25,3 +25,4 @@ No mouse support (sorry), game is entirely playable on keyboard
 - Space - Fire weapon
 - E - Open doors (must be very close to the door)
 - P - Restart level
+- Esc - Exit level
