@@ -1,7 +1,7 @@
 #include "enemy.h"
 
-struct Enemy e[10];
-struct EnemyTex eTex[3];
+struct Enemy e[MAX_ENEMIES];
+struct EnemyTex eTex[ENEMY_ARR_SIZE];
 int numberOfEnemies;
 int enemyKills;
 
@@ -85,13 +85,13 @@ void enemyTakeDamage(int num, int playerWeapon) {
 
 	if (e[num].enemyHealth <= 0) { //no negative health values
 		e[num].enemyHealth = 0; //set to 0
-		if (e[num].enemyState != 3) {
+		if (e[num].enemyState != ENEMY_DEAD) {
 			enemyKills += 1;
 		}
-		e[num].enemyState = 3; //enemy death state
+		e[num].enemyState = ENEMY_DEAD; //enemy death state
 	}
 	else {
-		e[num].enemyState = 1; //set enemy to active state if not already
+		e[num].enemyState = ACTIVE; //set enemy to active state if not already
 	}
 	b.hitEnemy = true;
 }
@@ -103,7 +103,7 @@ bool enemyCheckCollision(int num) {
 		return true;
 	}
 	if (e[num].distToPlayer <= 10) { //check for collision with player
-		e[num].enemyState = 2; //if the enemy gets close instead of randomly deciding when to shoot they just start blasting
+		e[num].enemyState = SHOOTING; //if the enemy gets close instead of randomly deciding when to shoot they just start blasting
 		return true;
 	}
 	return false;
@@ -157,7 +157,7 @@ void enemyShoot(int num) {
 			}
 		}
 
-		e[num].enemyState = 1;
+		e[num].enemyState = ACTIVE;
 		t = 0;
 	}
 }
@@ -273,7 +273,7 @@ void lookForPlayer(int num) {
 
 	if (cross1 > 0 && cross2 > 0 && pathClear == true) { //if player is in between lines AND is not obscured
 		//printf("found you\n");
-		e[num].enemyState = 1;
+		e[num].enemyState = ACTIVE;
 	}
 
 	//for debugging 
@@ -347,29 +347,29 @@ void trackPlayer(int num) {
 			e[num].enemySpeed = 0; //if speed is 0, enemy will not move
 		}
 		else {
-			e[num].enemySpeed = 0.03 * e[num].time;
+			e[num].enemySpeed = 10 * e[num].time;
 		}
 		e[num].eX += e[num].edX * e[num].enemySpeed; //enemy moves
 		e[num].eY += e[num].edY * e[num].enemySpeed;
 		animateWalk(num);
-		if (rand() % 50000 == 0) {
+		if (rand() % 100 == 0) {
 			//printf("im shooting you haha\n"); //enemy will shoot
-			e[num].enemyState = 2;
+			e[num].enemyState = SHOOTING;
 		}
 	}
 }
 
 void enemyAI(int num) {
-	if (e[num].enemyState == 0) { //enemy is idle, looking for player
+	if (e[num].enemyState == IDLE) { //enemy is idle, looking for player
 		lookForPlayer(num);
 	}
-	else if (e[num].enemyState == 1) { //enemy has seen player
+	else if (e[num].enemyState == ACTIVE) { //enemy has seen player
 		trackPlayer(num);
 	}
-	else if (e[num].enemyState == 2) {
+	else if (e[num].enemyState == SHOOTING) {
 		enemyShoot(num);
 	}
-	else if (e[num].enemyState == 3) {
+	else if (e[num].enemyState == ENEMY_DEAD) {
 		if (e[num].currentTex != eTex[e[num].enemyType].enemyDead4) {
 			animateDeath(num);
 		}
@@ -384,7 +384,7 @@ void createEnemy(float enemyX, float enemyY, int type, int num, float angle) {
 	e[num].edY = sin(e[num].enemyAngle);
 	e[num].enemyType = type;
 	e[num].enemyHealth = 100;
-	e[num].enemyState = 0;
+	e[num].enemyState = IDLE;
 	e[num].eBX = -100; //move bullet offscreen
 	e[num].eBY = -100;
 	numberOfEnemies += 1; //increment by one for each enemy created
@@ -394,13 +394,13 @@ void drawEnemy(int num, float deltaTime) {
 	for (int i = 0; i < num; i++) {
 		e[i].time = deltaTime;
 		//for debugging
-		//glColor3f(1, 0, 0);
-		//glPointSize(8);
-		//glBegin(GL_POINTS);
-		//glVertex2f(e[i].eX, e[i].eY);
-		//glEnd();
-		///*printf("enemy x pos: %f\n", e[i].eX);
-		//printf("enemy y pos: %f\n", e[i].eY);*/
+		/*glColor3f(1, 0, 0);
+		glPointSize(8);
+		glBegin(GL_POINTS);
+		glVertex2f(e[i].eX, e[i].eY);
+		glEnd();
+		printf("enemy x pos: %f\n", e[i].eX);
+		printf("enemy y pos: %f\n", e[i].eY);*/
 
 		//glPointSize(2);
 		//glColor3f(1, 0, 0);
@@ -420,18 +420,19 @@ void drawEnemy(int num, float deltaTime) {
 		float xDiff, yDiff;
 		xDiff = p.pX - e[i].eX;
 		yDiff = p.pY - e[i].eY;
-		e[i].rendered = false;
-		e[i].index = -100;
+		e[i].leftIndex = -100;
+		e[i].rightIndex = -100;
 		e[i].distToPlayer = sqrt((xDiff * xDiff) + (yDiff * yDiff));
 
 		e[i].rayX1 = e[i].eX;
 		e[i].rayY1 = e[i].eY;
 
-		if (e[i].enemyState == 0) {
+		if (e[i].enemyState == IDLE) {
 			e[i].angleFacingPlayer = e[i].enemyAngle - p.pAng + (PI / 2);
 			if (e[i].angleFacingPlayer <= -2 * PI) {
 				e[i].angleFacingPlayer += 2 * PI;
 			}
 		}
+		enemyAI(i);
 	}
 }

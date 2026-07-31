@@ -11,20 +11,27 @@
 
 #define PI 3.14159
 
+#define MAX_ENEMIES 10
 #define ENEMY_ARR_SIZE 3
+
+enum enemyState {
+	IDLE,
+	ACTIVE,
+	SHOOTING,
+	ENEMY_DEAD
+};
 
 struct Enemy {
 	float time; //variable for deltaTime
 	float eX, eY, edX, edY;
-	int enemyState; //0 for waiting, 1 for active, 2 for shooting, 3 for dead
+	enum enemyState enemyState; //0 for waiting, 1 for active, 2 for shooting, 3 for dead
 	int enemyHealth; //when 0, is dead
 	int enemyType; //what kind of enemy is it?
-	int index; //gets ray that hits the enemy for positioning on screen
+	int leftIndex, rightIndex; //gets ray that hits the enemy for positioning on screen
 	float distToPlayer, enemyAngle; //used for enemy movement
 	GLuint currentTex; //current enemy texture being displayed on screen
-	float enemyX1, enemyX2, enemyY1, enemyY2; //for raycasting
+	float enemyY1, enemyY2; //for raycasting
 	float angleFacingPlayer; //determines which sprite is loaded in
-	bool rendered; //is enemy rendered on screen?
 	float enemySpeed; //enemy movement speed
 	int posToTileX, posToTileY, posToTileX2, posToTileY2; //for finding position of ray endpoint on gridmap
 	float rayX1, rayX2, rayY1, rayY2, rayDX, rayDY, rayAngle; //for finding path to player

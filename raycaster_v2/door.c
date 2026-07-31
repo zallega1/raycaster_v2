@@ -28,13 +28,11 @@ void initDoors() {
 }
 
 void openDoor(int num) {
-	static float t;
-
-	if (d[num].isOpened == true && t == 0) {
-		t = glfwGetTime();
+	if (d[num].isOpened == true && d[num].time == 0) {
+		d[num].time = glfwGetTime();
 	}
 
-	float elapsedTime = glfwGetTime() - t;
+	float elapsedTime = glfwGetTime() - d[num].time;
 
 	if (elapsedTime < 3) {
 		map[d[num].dTileY][d[num].dTileX] = 0;
@@ -42,6 +40,6 @@ void openDoor(int num) {
 	else {
 		map[d[num].dTileY][d[num].dTileX] = d[num].type;
 		d[num].isOpened = false;
-		t = 0;
+		d[num].time = 0;
 	}
 }

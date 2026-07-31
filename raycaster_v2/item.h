@@ -12,11 +12,11 @@
 #define MAX_ITEMS 30
 
 struct Item {
-	bool rendered, pickedUp; 
+	bool pickedUp; 
 	GLuint itemTexture;
 	float iX, iY, distToPlayer;
-	int itemType, index;
-	float itemX1, itemX2, itemY1, itemY2; //for raycasting
+	int itemType, leftIndex, rightIndex;
+	float itemY1, itemY2; //for raycasting
 };
 struct Item it[MAX_ITEMS];
 int numberOfItems;

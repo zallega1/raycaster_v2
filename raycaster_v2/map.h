@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include "door.h"
+#include "wall.h"
 
 #define X_TILES 32
 #define Y_TILES 32

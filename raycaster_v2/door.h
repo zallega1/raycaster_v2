@@ -7,14 +7,11 @@
 
 #define MAX_DOORS 20
 
-/* the door struct works via player collision checks.
-	if the player is on a tile corresponding to a door,
-	the coordinates and boolean variables will be stored
-	in the struct*/
 struct Door {
 	GLuint doorTexture;
 	bool inRange, isOpened;
-	int dTileX, dTileY, type; //tile positions of door
+	int dTileX, dTileY, type, dCenter; //tile positions of door
+	float time;
 };
 struct Door d[MAX_DOORS];
 

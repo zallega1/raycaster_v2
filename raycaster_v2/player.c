@@ -7,21 +7,22 @@ void initPlayer() {
 	p.pX = 50;
 	p.pY = 50;
 	p.health = 100;
-	p.state = 0;
+	p.state = ALIVE;
 	p.dX = cos(p.pAng);
 	p.dY = sin(p.pAng);
 }
 
 void drawPlayer() {
 	//commented out code is for debugging
-	//glColor3f(1, 1, 0); //draw Player on minimap
-	//glPointSize(4);
-	//glBegin(GL_POINTS);
-	//glVertex2i(p.pX, p.pY);
-	//glEnd();
+	/*glColor3f(1, 1, 0); //draw Player on minimap
+	glPointSize(4);
+	glBegin(GL_POINTS);
+	glVertex2i(p.pX, p.pY);
+	glEnd();*/
 
 	p.dX = cos(p.pAng);
 	p.dY = sin(p.pAng);
+	//set camera direction vector equal to player direction vector
 
 	/*glPointSize(1);
 	glBegin(GL_LINES);
@@ -43,7 +44,7 @@ bool checkCollision(float x, float y) {
 			int x1 = collX * cellSize;
 			int x2 = x1 + cellSize;
 			int xC = (x1 + x2) / 2;
-			if (x >= xC - 2 && x <= xC + 2) {
+			if (x >= xC - 1 && x <= xC + 1) {
 				return true;
 			}
 		}
@@ -51,12 +52,12 @@ bool checkCollision(float x, float y) {
 			int y1 = collY * cellSize;
 			int y2 = y1 + cellSize;
 			int yC = (y1 + y2) / 2;
-			if (y >= yC - 2 && y <= yC + 2) {
+			if (y >= yC - 1 && y <= yC + 1) {
 				return true;
 			}
 		}
 		else if (map[collY][collX] == 4) {
-			p.state = 2; //player beats level when they touch end block
+			p.state = COMPLETE; //player beats level when they touch end block
 			return true;
 		}
 	}
@@ -99,6 +100,6 @@ void damagePlayer(int enemyType) {
 	p.health -= damage;
 	if (p.health <= 0) {
 		p.health = 0;
-		p.state = 1; //player dead state
+		p.state = DEAD; //player dead state
 	}
 }

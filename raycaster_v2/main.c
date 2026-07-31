@@ -24,19 +24,46 @@
 
 //Main program loop for raycaster
 
+enum gameState {
+    TITLE_SCREEN,
+    LEVEL_SELECT,
+    SETTINGS,
+    GAME_START,
+    LEVEL_COMPLETE
+};
+
+enum titleSelect {
+    NONE = -1, //none is used by level and complete select as well
+    START = 0,
+    QUIT = 1
+};
+
+enum levelSelect {
+    BACK,
+    LEVEL_1,
+    LEVEL_2,
+    LEVEL_3
+};
+
+enum completeSelect {
+    RESTART,
+    BACK_TO_SELECT
+};
+
 GLFWwindow* window;
-int gameState; //0 = title screen, 1 = level select, 2 = settings, 3 = game start, 4 = level complete
-int titleSelect; //0 = start, 1 = quit
-int levelSelect; //0 = back, 1 = level 1, 2 = level 2, 3 = level 3
-int completeSelect; //0 = restart, 1 = back to level select
+enum gameState gameState; 
+enum titleSelect titleSelect; 
+enum levelSelect levelSelect;
+enum completeSelect completeSelect;
 
 void init() { //initialize the screen on program startup
     glClearColor(0.2, 0.2, 0.2, 0);
     glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1, 1);
-    gameState = 0;
-    titleSelect = -1;
-    levelSelect = -1;
-    completeSelect = -1;
+    loadFont();
+    gameState = TITLE_SCREEN;
+    titleSelect = NONE;
+    levelSelect = NONE;
+    completeSelect = NONE;
 }
 
 float deltaX; //for mouse controls
@@ -49,61 +76,61 @@ void display() { //display the graphics
     deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
-    if (gameState == 0) {
+    if (gameState == TITLE_SCREEN) {
         glfwWaitEventsTimeout(0.5);
         drawTitleBackground(titleSelect);
         levelInit = false;
         if (k.down == 1) {
             titleSelect += 1;
-            if (titleSelect > 1) {
-                titleSelect = 0;
+            if (titleSelect > QUIT) {
+                titleSelect = START;
             }
         }
         if (k.up == 1) {
             titleSelect -= 1;
-            if (titleSelect < 0) {
-                titleSelect = 1;
+            if (titleSelect < START) {
+                titleSelect = QUIT;
             }
         }
 
-        if ((k.space == 1 || k.enter == 1) && titleSelect == 0) {
-            levelSelect = 1;
-            gameState = 1;
+        if ((k.space == 1 || k.enter == 1) && titleSelect == START) {
+            levelSelect = LEVEL_1;
+            gameState = LEVEL_SELECT;
         }
-        else if (((k.space == 1 || k.enter == 1) && titleSelect == 1)) {
+        else if (((k.space == 1 || k.enter == 1) && titleSelect == QUIT)) {
             glfwTerminate();
         }
     }
-    else if (gameState == 1) {
+    else if (gameState == LEVEL_SELECT) {
         glfwWaitEventsTimeout(0.5);
         drawLevelSelectBackground(levelSelect);
-        if ((k.space == 1 || k.enter == 1) && levelSelect == 1) {
-            gameState = 3;
+        if ((k.space == 1 || k.enter == 1) && levelSelect == LEVEL_1) {
+            gameState = GAME_START;
         }
-        else if ((k.space == 1 || k.enter == 1) && levelSelect == 0) {
-            titleSelect = 0;
-            gameState = 0;
+        else if ((k.space == 1 || k.enter == 1) && levelSelect == BACK) {
+            titleSelect = START;
+            gameState = TITLE_SCREEN;
         }
 
         if (k.down == 1) {
             levelSelect += 1;
             glfwWaitEventsTimeout(0.5);
-            if (levelSelect > 3) {
-                levelSelect = 0;
+            if (levelSelect > LEVEL_3) {
+                levelSelect = BACK;
             }
         }
         if (k.up == 1) {
             levelSelect -= 1;
             glfwWaitEventsTimeout(0.5);
-            if (levelSelect < 0) {
-                levelSelect = 3;
+            if (levelSelect < BACK) {
+                levelSelect = LEVEL_3;
             }
         }
     }
-    else if (gameState == 2) {
+    else if (gameState == SETTINGS) {
         //todo: settings menu
     }
-    else if (gameState == 3) {
+    else if (gameState == GAME_START) {
         if (levelInit == false) {
             initMap();
             initPlayer();
@@ -111,13 +138,11 @@ void display() { //display the graphics
             initEnemies();
             initItems();
             initDoors();
-            w.wallTexture = loadTexture("textures/walls/wall.png");
-            w.exitTexture = loadTexture("textures/walls/exit.png");
             drawWeapon(1);
             levelInit = true;
         }
         //what to draw when player is alive
-        if (p.state == 0) {
+        if (p.state == ALIVE) {
             p.speed = 50 * deltaTime;
             float pAngSide; //angle for strafing movement
             //player movement
@@ -195,7 +220,7 @@ void display() { //display the graphics
                 fireGun(deltaTime);
             }
         }
-        if (p.state == 1) { //when player dies
+        if (p.state == DEAD) { //when player dies
             glClear(GL_COLOR_BUFFER_BIT);
             drawMap();
             drawLevelBackground(levelSelect);
@@ -203,27 +228,32 @@ void display() { //display the graphics
             drawHUD();
             drawText("Press P to Retry", SCREEN_WIDTH * 0.125, SCREEN_WIDTH * 0.2083, SCREEN_HEIGHT * 0.5, SCREEN_HEIGHT * 0.625);
         }
-        if (p.state == 2) { //when completed level
+        if (p.state == COMPLETE) { //when completed level
             levelInit = false;
-            completeSelect = 0;
-            gameState = 4;
+            completeSelect = RESTART;
+            gameState = LEVEL_COMPLETE;
         }
 
         if (k.p == 1) { //reset level button, active as long as level has not been completed and game is not paused
-            if (p.state != 2) {
+            if (p.state != COMPLETE) {
                 initMap();
                 initPlayer();
                 initWeapon();
                 initEnemies();
                 initItems();
                 initDoors();
-                w.wallTexture = loadTexture("textures/walls/wall.png");
                 drawWeapon(1);
                 p.state = 0;
             }
         }
+
+        if (k.esc == 1) { //exit level
+            levelInit = false;
+            levelSelect = LEVEL_1;
+            gameState = LEVEL_SELECT;
+        }
     }
-    else if (gameState == 4) {
+    else if (gameState == LEVEL_COMPLETE) {
         glClear(GL_COLOR_BUFFER_BIT);
         drawMap();
         drawLevelBackground(levelSelect);
@@ -233,23 +263,23 @@ void display() { //display the graphics
         drawLevelCompleteBackground(completeSelect);
         if (k.down == 1) {
             completeSelect += 1;
-            if (completeSelect > 1) {
-                completeSelect = 0;
+            if (completeSelect > BACK_TO_SELECT) {
+                completeSelect = RESTART;
             }
         }
         if (k.up == 1) {
             completeSelect -= 1;
-            if (completeSelect < 0) {
-                completeSelect = 1;
+            if (completeSelect < RESTART) {
+                completeSelect = BACK_TO_SELECT;
             }
         }
 
-        if ((k.space == 1 || k.enter == 1) && completeSelect == 0) {
-            gameState = 3;
+        if ((k.space == 1 || k.enter == 1) && completeSelect == RESTART) {
+            gameState = GAME_START;
         }
-        else if ((k.space == 1 || k.enter == 1) && completeSelect == 1) {
-            levelSelect = 1;
-            gameState = 1;
+        else if ((k.space == 1 || k.enter == 1) && completeSelect == BACK_TO_SELECT) {
+            levelSelect = LEVEL_1;
+            gameState = LEVEL_SELECT;
         }
     }
 
@@ -298,9 +328,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) k.esc = 0;
 }
 
-int main(void){
+int main(){
 
-    /* Initialize the library */
     if (!glfwInit())
         return -1;
 
@@ -311,7 +340,6 @@ int main(void){
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_FALSE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "untitled FPS game", NULL, NULL);
     if (!window)
     {
@@ -319,13 +347,12 @@ int main(void){
         return -1;
     }
 
-    /* Make the window's context current */
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
 
     init();
-    /* Loop until the user closes the window */
+
     while (!glfwWindowShouldClose(window))
     {
         display();
