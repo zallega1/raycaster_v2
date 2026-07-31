@@ -43,6 +43,8 @@ int map[Y_TILES][X_TILES] =
 void initMap() {
 	cellSize = 16;
 	level = 1;
+	w.wallTexture = loadTexture("textures/walls/wall.png");
+	w.exitTexture = loadTexture("textures/walls/exit.png");
 	for (int i = 0; i < numberOfDoors; i++) {
 		if (map[d[i].dTileY][d[i].dTileX] == 0) {
 			map[d[i].dTileY][d[i].dTileX] = d[i].type;
@@ -61,6 +63,23 @@ void drawMap() {
 			xC = (x1 + x2) / 2; //xC and yC are for doors, since they are more narrow than walls
 			yC = (y1 + y2) / 2;
 
+			if (map[y][x] == 2) {
+				for (int i = 0; i < numberOfDoors; i++) {
+					if (d[i].dTileX == x && d[i].dTileY == y) {
+						d[i].dCenter = xC;
+						break;
+					}
+				}
+			}
+			else if (map[y][x] == 3) {
+				for (int i = 0; i < numberOfDoors; i++) {
+					if (d[i].dTileX == x && d[i].dTileY == y) {
+						d[i].dCenter = yC;
+						break;
+					}
+				}
+			}
+
 			//for debugging
 			/*if (level == 1) {
 				if (map[y][x] != 0) {
@@ -74,10 +93,10 @@ void drawMap() {
 					drawRect(x1, x2, y1, y2);
 				}
 				else if (map[y][x] == 2) {
-					drawRect(xC, xC + 2, y1, y2);
+					drawRect(xC - 1, xC + 1, y1, y2);
 				}
 				else if (map[y][x] == 3) {
-					drawRect(x1, x2, yC, yC + 2);
+					drawRect(x1, x2, yC - 1, yC + 1);
 				}
 				else if (map[y][x] == 4) {
 					drawRect(x1, x2, y1, y2);

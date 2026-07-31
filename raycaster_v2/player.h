@@ -11,13 +11,19 @@
 
 #define PI 3.14159
 
+enum state {
+	ALIVE,
+	DEAD,
+	COMPLETE
+};
+
 struct Player {
 	float pX, pY; //player x and y coordinates
 	float pAng; //player angle
 	float dX, dY; //delta x and delta y
 	float speed; //player speed, depending on collision detection
 	int health;
-	int state; //0 while alive, 1 when dead
+	enum state state;
 };
 struct Player p; //create player character globally
 

@@ -44,8 +44,8 @@ void drawItem(int num) {
 		float xDiff, yDiff;
 		xDiff = p.pX - it[k].iX;
 		yDiff = p.pY - it[k].iY;
-		it[k].rendered = false;
-		it[k].index = -100;
+		it[k].leftIndex = -100;
+		it[k].rightIndex = -100;
 		it[k].distToPlayer = sqrt((xDiff * xDiff) + (yDiff * yDiff));
 		if (it[k].distToPlayer < 4) {
 			pickupItem(k);

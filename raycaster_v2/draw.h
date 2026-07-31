@@ -7,6 +7,17 @@
 
 #define SCREEN_WIDTH 1600
 
+struct Font {
+	GLuint letter[26];
+	GLuint num[10];
+	GLuint space;
+	GLuint symbol;
+};
+struct Font font;
+
+//function for loading font
+void loadFont();
+
 //for drawing rectangles
 void drawRect(int x1, int x2, int y1, int y2);
 

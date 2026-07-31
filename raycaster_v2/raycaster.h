@@ -22,15 +22,18 @@ struct Rays {
 struct Rays r;
 
 //cast the drawn rays on screen to create a 3D environment
-void castRays();
+void castRays(int i);
 
 //draw the rays on the 2D map from the player to the walls 
 void drawRays();
 
+//function that determines current enemy sprite
+void enemyTexture(int i);
+
 //cast the enemy sprite on to the 3d environment
-void castEnemies(float dist);
+void castEnemies();
 
 //cast the item sprite on to the 3d enviornment
-void castItems(float dist);
+void castItems();
 
 #endif

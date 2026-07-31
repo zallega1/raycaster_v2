@@ -4,78 +4,98 @@ struct Rays r;
 
 int posToTileX, posToTileY;
 int side;
+float zBuffer[SCREEN_WIDTH/8];
 
-void castItems(float dist) {
-	//cast items
-	for (int k = 0; k < numberOfItems; k++) {
-		if (it[k].pickedUp == false && it[k].distToPlayer < dist && it[k].index != -100) {
-			glColor3f(1, 1, 1);
-			it[k].itemY1 = SCREEN_HEIGHT / 2;
-			it[k].itemY2 = it[k].itemY1 + ((SCREEN_HEIGHT / it[k].distToPlayer) * 4);
-			if (it[k].itemX2 - it[k].itemX1 < (SCREEN_WIDTH / it[k].distToPlayer) * 2) { //for increasing width of sprite as player gets closer
-				it[k].itemX2 += (SCREEN_WIDTH / r.numRays) * 4;
-			}
-			if (it[k].itemX2 - it[k].itemX1 >= (SCREEN_WIDTH / it[k].distToPlayer) * 2) {
-				drawTexRect(it[k].itemTexture, 0, 1, 0, 1, it[k].itemX1, it[k].itemX2, it[k].itemY1, it[k].itemY2);
+void castItems() {
+	//same logic as castEnemies, but for items
+	for (int i = 0; i < numberOfItems; i++) {
+		if (it[i].leftIndex != -100 && it[i].pickedUp == false) {
+			it[i].itemY1 = SCREEN_HEIGHT / 2;
+			it[i].itemY2 = it[i].itemY1 + ((SCREEN_HEIGHT / it[i].distToPlayer) * 4);
+
+			float j1 = it[i].leftIndex;
+			float j2 = it[i].rightIndex;
+
+			for (int j = j1; j <= j2; j++) {
+				if (it[i].distToPlayer < zBuffer[j]) {
+					float t1 = (j - j1) / (j2 - j1);
+					float t2 = (j + 1 - j1) / (j2 - j1);
+
+					float sliceStart = j * (SCREEN_WIDTH / r.numRays);
+					float sliceEnd = sliceStart + (SCREEN_WIDTH / r.numRays);
+
+					drawTexRect(it[i].itemTexture, t1, t2, 0, 1, sliceStart, sliceEnd, it[i].itemY1, it[i].itemY2);
+				}
 			}
 		}
 	}
 }
 
-void castEnemies(float dist) {
-	//cast enemies
+void enemyTexture(int i) {
+	if (e[i].enemyHealth > 0) {
+		//make angle positive so my head doesn't explode
+		float correctAngle = fabs(e[i].angleFacingPlayer);
+
+		//for debugging
+		//printf("%f\n", correctAngle);
+
+		if (correctAngle < 7 * PI / 4 && correctAngle >= 5 * PI / 4) {
+			e[i].currentTex = eTex[e[i].enemyType].enemyTexBack;
+		}
+		else if (correctAngle < PI / 4 || correctAngle >= 7 * PI / 4) {
+			e[i].currentTex = eTex[e[i].enemyType].enemyTexLeft;
+		}
+		else if (correctAngle < 3 * PI / 4 && correctAngle >= PI / 4) {
+			e[i].currentTex = eTex[e[i].enemyType].enemyTexFront;
+		}
+		else if (correctAngle < 5 * PI / 4 && correctAngle >= 3 * PI / 4) {
+			e[i].currentTex = eTex[e[i].enemyType].enemyTexRight;
+		}
+	}
+	else { //if enemy is dead
+		if (e[i].currentTex == eTex[e[i].enemyType].enemyDead4) {
+			e[i].enemyY1 = SCREEN_HEIGHT / 2;
+			e[i].enemyY2 = (SCREEN_HEIGHT / 2) + (((SCREEN_HEIGHT) / e[i].distToPlayer) * 7);
+		}
+	}
+}
+
+void castEnemies() {
+	glColor3f(1, 1, 1);
 	for (int i = 0; i < numberOfEnemies; i++) {
-		if (e[i].distToPlayer < dist && e[i].index != -100) { //check if ray is hitting enemy for each ray cast
-			glColor3f(1, 1, 1);
+		if (e[i].leftIndex != -100) { 
+			//y coordinates based on distance to player
 			e[i].enemyY1 = SCREEN_HEIGHT / 4;
 			e[i].enemyY2 = e[i].enemyY1 + ((SCREEN_HEIGHT / e[i].distToPlayer) * 16);
-			if (e[i].enemyX2 - e[i].enemyX1 < (SCREEN_WIDTH / e[i].distToPlayer) * 4) { //for increasing width of sprite as player gets closer
-				e[i].enemyX2 += (SCREEN_WIDTH / r.numRays) * 4;
-			}
-			//this is legitimately some of the worst code I have ever written
-			//so basically because I don't understand how to map shit from a 2d to 3d enviornment
-			//i had it calculate the x2 of the enemy by incrementing it for every slice, then
-			//preforming a check to see if it exceeds the desired width
-			//it kind of works???
-			if (e[i].enemyX2 - e[i].enemyX1 >= (SCREEN_WIDTH / e[i].distToPlayer) * 4) {
-				if (e[i].enemyHealth > 0) {
-					//make angle positive so my head doesn't explode
-					float correctAngle = fabs(e[i].angleFacingPlayer);
 
-					//for debugging
-					//printf("%f\n", correctAngle);
+			//determine which sprite to be cast based on angle to player
+			enemyTexture(i);
 
-					if (correctAngle < 7 * PI / 4 && correctAngle >= 5 * PI / 4) {
-						e[i].currentTex = eTex[e[i].enemyType].enemyTexBack;
-						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
-					}
-					else if (correctAngle < PI / 4 || correctAngle >= 7 * PI / 4) {
-						e[i].currentTex = eTex[e[i].enemyType].enemyTexLeft;
-						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
-					}
-					else if (correctAngle < 3 * PI / 4 && correctAngle >= PI / 4) {
-						e[i].currentTex = eTex[e[i].enemyType].enemyTexFront;
-						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
-					}
-					else if (correctAngle < 5 * PI / 4 && correctAngle >= 3 * PI / 4) {
-						e[i].currentTex = eTex[e[i].enemyType].enemyTexRight;
-						drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2, e[i].enemyY1, e[i].enemyY2);
-					}
-				}
-				else { //if enemy is dead
-					if (e[i].currentTex == eTex[e[i].enemyType].enemyDead4) {
-						e[i].enemyY1 = SCREEN_HEIGHT / 2;
-						e[i].enemyY2 = (SCREEN_HEIGHT / 2) + (((SCREEN_HEIGHT) / e[i].distToPlayer) * 7);
-					}
-					drawTexRect(e[i].currentTex, 0, 1, 0, 1, e[i].enemyX1, e[i].enemyX2 * 1.2, e[i].enemyY1, e[i].enemyY2);
+			//loop through indexed rays
+			//would use r instead of j but the ray struct is r and i don't want to change it
+			float j1 = e[i].leftIndex;
+			float j2 = e[i].rightIndex;
+
+			for (int j = j1; j <= j2; j++) {
+				//compare player distance to distance stored in z buffer
+				if (e[i].distToPlayer < zBuffer[j]) {
+
+					//texture slices, gotta be between 0 and 1
+					float t1 = (j - j1)/(j2 - j1);
+					float t2 = (j + 1 - j1)/(j2 - j1);
+
+					//find starting x position of slice, then use that to determine end position
+					float sliceStart = j * (SCREEN_WIDTH / r.numRays);
+					float sliceEnd = sliceStart + (SCREEN_WIDTH / r.numRays);
+
+					drawTexRect(e[i].currentTex, t1, t2, 0, 1, sliceStart, sliceEnd, e[i].enemyY1, e[i].enemyY2);
 				}
 			}
 		}
-		enemyAI(i);
 	}
 }
 
-void castRays() {
+void castRays(int i) {
 	float rayToWallDist, diff, correctDist;
 	w.wallY1 = SCREEN_HEIGHT / 4;
 	diff = fabs(p.pAng - r.rayAngle); //finds difference in player angle and ray angle
@@ -83,8 +103,10 @@ void castRays() {
 	correctDist = rayToWallDist * cos(diff); //factors in difference in angles to eliminate fisheye effects
 	w.wallY2 = w.wallY1 + ((SCREEN_HEIGHT / correctDist) * cellSize);
 
+	zBuffer[i] = rayToWallDist; //store distance in z buffer for sprite casting
+
 	float offset;
-	float offsetWidth = (1 / 32);
+	float offsetWidth = (1 / 32); //textures are 32x32
 
 	if (side == 0) {
 		offset = fmod(r.rayY2, cellSize) / cellSize;
@@ -124,12 +146,7 @@ void castRays() {
 	}
 	else if (map[posToTileY][posToTileX] == 4) {
 		drawTexRect(w.exitTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
-	}
-
-	if (p.state == 0) { //only cast if player is alive
-		castEnemies(rayToWallDist);
-		castItems(rayToWallDist);
-	}
+	} 
 }
 
 void drawRays() {
@@ -169,63 +186,57 @@ void drawRays() {
 			}
 			else if (map[posToTileY][posToTileX] == 2) {
 				//ensures door textures are not warped from depth
-				if ((r.rayX1/cellSize) < posToTileX) {
-					r.rayX2 += r.rayDX + (cellSize / 2);
+				int center;
+				for (int j = 0; j < numberOfDoors; j++) {
+					if (d[j].dTileX == posToTileX && d[j].dTileY == posToTileY) {
+						center = d[j].dCenter;
+						break;
+					}
 				}
-				else {
-					r.rayX2 -= r.rayDX + (cellSize / 2);
+				if (r.rayX2 >= center - 1 && r.rayX2 <= center + 1) {
+					if ((int)oldX / cellSize != posToTileX) { //flip sides for vertical wall
+						side = 1; //hit vertical side
+					}
+					else {
+						side = 0; //hit horizontal side
+					}
+					break;
 				}
-
-				if ((int)oldX / cellSize != posToTileX) {
-					side = 0; //hit vertical side
-				}
-				else {
-					side = 1; //hit horizontal side
-				}
-				break;
 			}
 			else if (map[posToTileY][posToTileX] == 3) {
 				//ensures door textures are not warped from depth
-				if ((r.rayY1 / cellSize) < posToTileY) {
-					r.rayY2 += r.rayDY + (cellSize / 2);
+				int center;
+				for (int j = 0; j < numberOfDoors; j++) {
+					if (d[j].dTileX == posToTileX && d[j].dTileY == posToTileY) {
+						center = d[j].dCenter;
+						break;
+					}
 				}
-				else {
-					r.rayY2 -= r.rayDY + (cellSize / 2);
+				if (r.rayY2 >= center - 1 && r.rayY2 <= center + 1) {
+					if ((int)oldX / cellSize != posToTileX) {
+						side = 0; //hit vertical side
+					}
+					else {
+						side = 1; //hit horizontal side
+					}
+					break;
 				}
-
-				if ((int)oldX / cellSize != posToTileX) {
-					side = 0; //hit vertical side
-				}
-				else {
-					side = 1; //hit horizontal side
-				}
-				break;
 			}
 
 			for (int j = 0; j < numberOfEnemies; j++) { //check to see if ray hits enemy, if so index it
-				if (r.rayX2 >= e[j].eX - 3 && r.rayX2 <= e[j].eX + 3) {
-					if (r.rayY2 >= e[j].eY - 3 && r.rayY2 <= e[j].eY + 3) {
-						if (e[j].rendered == false) {
-							e[j].index = i;
-							e[j].rendered = true;
-							e[j].enemyX1 = e[j].index * (SCREEN_WIDTH / r.numRays) + (SCREEN_WIDTH * 0.03); //adjust offset as needed
-							e[j].enemyX2 = e[j].enemyX1 + (SCREEN_WIDTH / r.numRays) * 4;
-							//initialize x2 value
-						}
+				if ((r.rayX2 >= e[j].eX - 3 && r.rayX2 <= e[j].eX + 3) && (r.rayY2 >= e[j].eY - 3 && r.rayY2 <= e[j].eY + 3)) {
+					if (e[j].leftIndex == -100) {
+						e[j].leftIndex = i;
 					}
+					e[j].rightIndex = i;
 				}
 			}
 			for (int j = 0; j < numberOfItems; j++) { //check to see if ray hits item, if so index it
-				if (r.rayX2 >= it[j].iX - 3 && r.rayX2 <= it[j].iX + 3) {
-					if (r.rayY2 >= it[j].iY - 3 && r.rayY2 <= it[j].iY + 3) {
-						if (it[j].rendered == false) {
-							it[j].index = i;
-							it[j].rendered = true;
-							it[j].itemX1 = it[j].index * (SCREEN_WIDTH / r.numRays) + (SCREEN_WIDTH * 0.03);
-							it[j].itemX2 = it[j].itemX1 + (SCREEN_WIDTH / r.numRays) * 2;
-							//initialize x2 value
-						}
+				if ((r.rayX2 >= it[j].iX - 1 && r.rayX2 <= it[j].iX + 1) && (r.rayY2 >= it[j].iY - 1 && r.rayY2 <= it[j].iY + 1)) {
+					if (it[j].leftIndex == -100) {
+						it[j].leftIndex = i;
 					}
+					it[j].rightIndex = i;
 				}
 			}
 		}
@@ -238,7 +249,11 @@ void drawRays() {
 		glVertex2i(r.rayX2, r.rayY2);
 		glEnd();*/
 
-		castRays();
+		castRays(i);
 		r.rayAngle += (60*(PI/180))/r.numRays; //60 degrees in radians divided by numRays
+	}
+	if (p.state == ALIVE) { //only cast if player is alive
+		castEnemies();
+		castItems();
 	}
 }
