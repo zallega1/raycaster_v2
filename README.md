@@ -7,7 +7,7 @@ I started this project because I wanted to make a game in C and was playing a lo
 
 ## How to run
 
-Open the .sln file in VS2022, set build config to x64, and run
+You will need to build the source code using CMake (at least version 3.2.3) by using the command line to navigate to the root folder and running the command "cmake -B <output_folder_name>". After the build files are created, use the command "cmake --build <output_folder_name>" to create the executable.
 
 ## How to play
 
