@@ -20,6 +20,7 @@ struct Item {
 };
 struct Item it[MAX_ITEMS];
 int numberOfItems;
+bool ykey, bkey, rkey; //booleans for when keys are picked up
 
 //initializes the items for each level
 void initItems();

@@ -186,7 +186,7 @@ void display() { //display the graphics
             }
             if (k.e == 1) {
                 for (int i = 0; i < numberOfDoors; i++) {
-                    if (d[i].inRange == true) {
+                    if (d[i].inRange == true && ((d[i].key == 0) || (d[i].key == 1 && ykey == true) || (d[i].key == 2 && bkey == true) || (d[i].key == 3 && rkey == true))) { //if door requires key, check if player has picked it up
                         d[i].isOpened = true;
                         openDoor(i);
                     }
@@ -210,7 +210,12 @@ void display() { //display the graphics
             //check if door is open so it can be closed
             for (int i = 0; i < numberOfDoors; i++) {
                 if (d[i].inRange == true && d[i].isOpened == false) {
-                    drawText("E to open", SCREEN_WIDTH * 0.25, SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5, SCREEN_HEIGHT * 0.625);
+                    if (d[i].key == 0 || (d[i].key == 1 && ykey == true) || (d[i].key == 2 && bkey == true) || (d[i].key == 3 && rkey == true)) {
+                        drawText("E to open", SCREEN_WIDTH * 0.25, SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5, SCREEN_HEIGHT * 0.625);
+                    }
+                    else {
+                        drawText("Door is locked", SCREEN_WIDTH * 0.25, SCREEN_WIDTH * 0.33, SCREEN_HEIGHT * 0.5, SCREEN_HEIGHT * 0.625);
+                    }
                 }
                 if (d[i].isOpened == true) {
                     openDoor(i);
