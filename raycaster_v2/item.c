@@ -2,18 +2,27 @@
 
 struct Item it[MAX_ITEMS];
 int numberOfItems;
+bool ykey, bkey, rkey;
 
 /* ITEM TYPES
 	1 = HEALTH PACK
 	2 = AMMO PACK 
+	3 = YELLOW KEY
+	4 = BLUE KEY
+	5 = RED KEY
+	you should only have one of each type of key in a level
 */
 
 void initItems() { //initItems, createItem, and drawItem follow same logic as enemy functions
 	numberOfItems = 0;
+	ykey = false;
+	bkey = false;
+	rkey = false;
 	if (level = 1) {
 		createItem(100, 30, 2, numberOfItems);
 		createItem(135, 170, 1, numberOfItems);
 		createItem(135, 230, 2, numberOfItems);
+		createItem(368, 360, 3, numberOfItems);
 	}
 }
 
@@ -28,6 +37,15 @@ void createItem(float itemX, float itemY, int itemType, int num) {
 		break;
 	case 2:
 		it[num].itemTexture = loadTexture("textures/hud/ammo.png");
+		break;
+	case 3:
+		it[num].itemTexture = loadTexture("textures/items/ykey.png");
+		break;
+	case 4:
+		it[num].itemTexture = loadTexture("textures/items/bkey.png");
+		break;
+	case 5:
+		it[num].itemTexture = loadTexture("textures/items/rkey.png");
 		break;
 	}
 	numberOfItems += 1;
@@ -62,6 +80,18 @@ void pickupItem(int num) {
 			break;
 		case 2:
 			refillAmmo(num);
+			break;
+		case 3:
+			it[num].pickedUp = true;
+			ykey = true;
+			break;
+		case 4:
+			it[num].pickedUp = true;
+			bkey = true;
+			break;
+		case 5:
+			it[num].pickedUp = true;
+			rkey = true;
 			break;
 		}
 	}
