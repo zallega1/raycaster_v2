@@ -25,7 +25,20 @@ void loadEnemyTex(int num) {
 		eTex[num].enemyWalk4 = loadTexture("textures/enemy/enemy1walk4.png");
 		break;
 	case 2:
-		//will add later
+		eTex[num].enemyTexFront = loadTexture("textures/enemy/enemy2_front.png");
+		eTex[num].enemyTexBack = loadTexture("textures/enemy/enemy2_back.png");
+		eTex[num].enemyTexLeft = loadTexture("textures/enemy/enemy2_left.png");
+		eTex[num].enemyTexRight = loadTexture("textures/enemy/enemy2_right.png");
+		eTex[num].enemyDead1 = loadTexture("textures/enemy/enemy2dead1.png");
+		eTex[num].enemyDead2 = loadTexture("textures/enemy/enemy2dead2.png");
+		eTex[num].enemyDead3 = loadTexture("textures/enemy/enemy2dead3.png");
+		eTex[num].enemyDead4 = loadTexture("textures/enemy/enemy2dead4.png");
+		eTex[num].enemyShoot1 = loadTexture("textures/enemy/enemy2_shoot1.png");
+		eTex[num].enemyShoot2 = loadTexture("textures/enemy/enemy2_shoot2.png");
+		eTex[num].enemyWalk1 = loadTexture("textures/enemy/enemy2walk1.png");
+		eTex[num].enemyWalk2 = loadTexture("textures/enemy/enemy2walk2.png");
+		eTex[num].enemyWalk3 = loadTexture("textures/enemy/enemy2walk3.png");
+		eTex[num].enemyWalk4 = loadTexture("textures/enemy/enemy2walk4.png");
 		break;
 	}
 }
@@ -39,10 +52,9 @@ void initEnemies() {
 	if (level == 1) {
 		createEnemy(200, 50, 1, numberOfEnemies, -PI);
 		createEnemy(230, 300, 1, numberOfEnemies, -PI/2);
-		createEnemy(180, 150, 1, numberOfEnemies, 0);
 		createEnemy(190, 300, 1, numberOfEnemies, -PI / 2);
 		createEnemy(260, 170, 1, numberOfEnemies, -PI);
-		createEnemy(290, 230, 1, numberOfEnemies, -PI);
+		createEnemy(290, 230, 2, numberOfEnemies, -PI);
 		createEnemy(360, 320, 1, numberOfEnemies, -3*PI/4);
 		createEnemy(380, 275, 1, numberOfEnemies, -PI);
 	}
@@ -76,7 +88,14 @@ void enemyTakeDamage(int num, int playerWeapon) {
 	switch (playerWeapon) {
 	case 0:
 	case 1:
-		e[num].enemyHealth -= 50;
+		switch (e[num].enemyType) {
+		case 1:
+			e[num].enemyHealth -= 15 * ((rand() % 5 - 1 + 1) + 1);
+			break;
+		case 2:
+			e[num].enemyHealth -= 10 * ((rand() % 5 - 1 + 1) + 1);
+			break;
+		}
 		break;
 	case 2:
 		//will finish later
@@ -152,7 +171,7 @@ void enemyShoot(int num) {
 					e[num].hitPlayer = true;
 					e[num].eBX = -100; //move bullet offscreen
 					e[num].eBY = -100;
-					damagePlayer(e[num].enemyType);
+					damagePlayer(e[num].enemyType, e[num].distToPlayer);
 				}
 			}
 		}

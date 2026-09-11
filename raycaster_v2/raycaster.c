@@ -139,14 +139,21 @@ void castRays(int i) {
 	}
 
 	if (map[posToTileY][posToTileX] == 1) {
-		drawTexRect(w.wallTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
+		w.currentTex = wallTex.tex1;
+		//drawTexRect(w.wallTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
 	}
 	else if (map[posToTileY][posToTileX] == 2 || map[posToTileY][posToTileX] == 3) {
-		drawTexRect(doorTex, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
+		w.currentTex = doorTex;
+		//drawTexRect(doorTex, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
 	}
 	else if (map[posToTileY][posToTileX] == 4) {
-		drawTexRect(w.exitTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
-	} 
+		w.currentTex = wallTex.exitTex;
+		//drawTexRect(w.exitTexture, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
+	}
+	else if (map[posToTileY][posToTileX] == 5) {
+		w.currentTex = wallTex.tex2;
+	}
+	drawTexRect(w.currentTex, offset, offset + offsetWidth, 0, 1, w.wallX1, w.wallX2, w.wallY1, w.wallY2);
 }
 
 void drawRays() {
@@ -172,7 +179,7 @@ void drawRays() {
 			posToTileX = (int)(r.rayX2) / cellSize;
 			posToTileY = (int)(r.rayY2) / cellSize;
 
-			if (map[posToTileY][posToTileX] == 1 || map[posToTileY][posToTileX] == 4) { //keep going until ray hits something
+			if (map[posToTileY][posToTileX] == 1 || map[posToTileY][posToTileX] == 4 || map[posToTileY][posToTileX] == 5) { //keep going until ray hits something
 				//fixes texture stretching on walls
 				//oldX position of ray X2/Y2 is compared with current ray X2/Y2 position on tilemap
 				//side variable is based on whether posToTileX or posToTileY changed

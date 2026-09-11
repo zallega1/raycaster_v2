@@ -6,7 +6,10 @@ struct GunTex gTex[GUN_ARR_SIZE];
 void loadGunTex(int num) {
 	switch (num) {
 	case 0:
+		//knife
+		break;
 	case 1:
+		//pistol
 		gTex[num].gunTexture = loadTexture("textures/guns/pistol-1.png");
 		gTex[num].gunTexture2 = loadTexture("textures/guns/pistol-2.png");
 		gTex[num].gunTexture3 = loadTexture("textures/guns/pistol-3.png");
