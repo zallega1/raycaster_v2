@@ -87,6 +87,15 @@ void animateDeath(int num) {
 void enemyTakeDamage(int num, int playerWeapon) {
 	switch (playerWeapon) {
 	case 0:
+		switch (e[num].enemyType) {
+		case 1:
+			e[num].enemyHealth -= 50;
+			break;
+		case 2:
+			e[num].enemyHealth -= 25;
+			break;
+		}
+		break;
 	case 1:
 		switch (e[num].enemyType) {
 		case 1:

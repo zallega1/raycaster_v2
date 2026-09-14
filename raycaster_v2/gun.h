@@ -19,7 +19,7 @@
 struct Gun {
 	int gunX, gunY, gunW, gunH, gunXOffset, gunYOffset; //x and y coordinates of weapon on screen, also width and height of image
 	GLuint currentTex;
-	int weapon, ammo; //integer corresponds to type of weapon, also ammo count
+	int weapon, ammo1; //integer corresponds to type of weapon, also ammo count
 	bool isFired; //boolean determining whether gun is being fired
 };
 struct Gun g;
