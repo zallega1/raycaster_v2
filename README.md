@@ -26,3 +26,5 @@ No mouse support (sorry), game is entirely playable on keyboard
 - E - Open doors (must be very close to the door)
 - P - Restart level
 - Esc - Exit level
+- 0 - Switch to knife
+- 1 - Switch to gun
