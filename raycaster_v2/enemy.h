@@ -14,6 +14,12 @@
 #define MAX_ENEMIES 10
 #define ENEMY_ARR_SIZE 3
 
+/* ENEMY TYPES:
+*  1 = SOLDIER
+   2 = ARMORED SOLDIER
+   just them 2 for now
+*/
+
 enum enemyState {
 	IDLE,
 	ACTIVE,

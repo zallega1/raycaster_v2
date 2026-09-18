@@ -6,9 +6,14 @@
 
 struct Wall {
 	float wallX1, wallX2, wallY1, wallY2;
-	GLuint wallTexture, exitTexture;
+	GLuint currentTex;
 	float texX1, texX2, texY1, texY2; //for texture mapping
 };
 struct Wall w;
+
+struct wallTex {
+	GLuint tex1, tex2, exitTex;
+};
+struct wallTex wallTex;
 
 #endif

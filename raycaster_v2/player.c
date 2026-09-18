@@ -37,7 +37,7 @@ bool checkCollision(float x, float y) {
 	collY = (int)(y / cellSize);
 	//collision checking for walls
 	if (map[collY][collX] != 0) {
-		if (map[collY][collX] == 1) {
+		if (map[collY][collX] == 1 || map[collY][collX] == 5) {
 			return true; //collision detected
 		}
 		else if (map[collY][collX] == 2) { //verically aligned door
@@ -84,17 +84,21 @@ bool checkCollision(float x, float y) {
 	return false;
 }
 
-void damagePlayer(int enemyType) {
+void damagePlayer(int enemyType, float distToPlayer) {
 	int damage; //damage depends on enemy type, with random multiplier
 
 	switch (enemyType) {
 	case 0:
 	case 1:
-		damage = 15 * ((rand() % 3 - 1 + 1) + 1);
+		damage = 8 * ((rand() % 4 - 1 + 1) + 1);
 		break;
 	case 2:
-		//will finish later
+		damage = 10 * ((rand() % 4 - 1 + 1) + 1);
 		break;
+	}
+
+	if (distToPlayer <= 10) {
+		damage = damage * 2; //double player damage if hit at close range
 	}
 
 	p.health -= damage;

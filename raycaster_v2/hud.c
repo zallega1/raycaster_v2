@@ -9,9 +9,20 @@ void drawHUD() {
 	drawTexRect(health, 0, 1, 0, 1, SCREEN_WIDTH * 0.1458, SCREEN_WIDTH * 0.2292, SCREEN_HEIGHT * 0.8125, SCREEN_HEIGHT * 0.9375);
 
 	int num1, num2, num3; //for ammo count in HUD
-	num3 = g.ammo / 100;
-	num2 = (g.ammo / 10) % 10;
-	num1 = g.ammo % 10;
+	switch (g.weapon) {
+	case 0: //knife, doesn't have ammo
+		num3 = 0;
+		num2 = 0;
+		num1 = 0;
+		break;
+	case 1:
+		num3 = g.ammo1 / 100;
+		num2 = (g.ammo1 / 10) % 10;
+		num1 = g.ammo1 % 10;
+		break;
+	case 2:
+		break;
+	}
 
 	switch (num3) {
 	case 0:

@@ -145,6 +145,7 @@ void display() { //display the graphics
         if (p.state == ALIVE) {
             p.speed = 50 * deltaTime;
             float pAngSide; //angle for strafing movement
+            int currentWeapon = g.weapon;
             //player movement
             if (k.left == 1) { // rotate player counterclockwise
                 p.pAng -= 4 * deltaTime;
@@ -192,8 +193,30 @@ void display() { //display the graphics
                     }
                 }
             }
-            if (k.space == 1 && g.isFired == false && g.ammo != 0) {
-                g.isFired = true;
+            if (k.space == 1 && g.isFired == false) {
+                switch (g.weapon) {
+                case 0:
+                    if (g.currentTex == gTex[g.weapon].gunTexture) { //must reset frames before attacking with the knife again
+                        g.isFired = true;
+                    }
+                    break;
+                case 1:
+                    if (g.ammo1 != 0) {
+                        g.isFired = true;
+                    }
+                    break;
+                case 2:
+                    //will finish later
+                    break;
+                }
+            }
+            if (k.g0 == 1 && g.weapon != 0 && g.isFired == false) {
+                currentWeapon = 0;
+                //printf("current weapon: knife\n");
+            }
+            if (k.g1 == 1 && g.weapon != 1 && g.isFired == false) {
+                currentWeapon = 1;
+                //printf("current weapon: pistol\n");
             }
 
             //actually drawing everything
@@ -203,7 +226,7 @@ void display() { //display the graphics
             drawEnemy(numberOfEnemies, deltaTime);
             drawLevelBackground(levelSelect);
             drawRays();
-            drawWeapon(1);
+            drawWeapon(currentWeapon);
             drawItem(numberOfItems);
             drawHUD();
 
@@ -331,6 +354,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) k.esc = 1;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) k.esc = 0;
+
+    if (key == GLFW_KEY_0 && action == GLFW_PRESS) k.g0 = 1;
+    if (key == GLFW_KEY_0 && action == GLFW_RELEASE) k.g0 = 0;
+
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS) k.g1 = 1;
+    if (key == GLFW_KEY_1 && action == GLFW_RELEASE) k.g1 = 0;
 }
 
 int main(){

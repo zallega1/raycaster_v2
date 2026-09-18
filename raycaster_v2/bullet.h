@@ -17,4 +17,6 @@ struct Bullet b;
 
 void fireBullet(float deltaTime, int weapon);
 
+void stab();
+
 #endif

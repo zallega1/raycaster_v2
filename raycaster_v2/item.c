@@ -108,11 +108,11 @@ void healPlayer(int num) {
 }
 
 void refillAmmo(int num) {
-	if (g.ammo < 50) {
+	if (g.ammo1 < 50) {
 		it[num].pickedUp = true;
-		g.ammo += 10;
-		if (g.ammo > 50) {
-			g.ammo = 50; //clamp to 50 bullets at maximum
+		g.ammo1 += 10;
+		if (g.ammo1 > 50) {
+			g.ammo1 = 50; //clamp to 50 bullets at maximum
 		}
 	}
 }

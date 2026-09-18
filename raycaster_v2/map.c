@@ -9,9 +9,9 @@ int map[Y_TILES][X_TILES] =
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -43,9 +43,19 @@ int map[Y_TILES][X_TILES] =
 void initMap() {
 	cellSize = 16;
 	level = 1;
-	w.wallTexture = loadTexture("textures/walls/wall.png");
-	w.exitTexture = loadTexture("textures/walls/exit.png");
-	for (int i = 0; i < numberOfDoors; i++) {
+
+	switch (level) {
+	case 1:
+		wallTex.tex1 = loadTexture("textures/walls/wall.png");
+		wallTex.tex2 = loadTexture("textures/walls/wall2.png");
+		wallTex.exitTex = loadTexture("textures/walls/exit.png");
+		break;
+	case 2:
+		//will finish later once I make another level
+		break;
+	}
+
+	for (int i = 0; i < numberOfDoors; i++) { //ensures open doors don't stay open when level resets
 		if (map[d[i].dTileY][d[i].dTileX] == 0) {
 			map[d[i].dTileY][d[i].dTileX] = d[i].type;
 		}

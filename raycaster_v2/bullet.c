@@ -37,3 +37,15 @@ void fireBullet(float deltaTime, int weapon) {
 		}
 	}
 }
+
+void stab() {
+	//if enemy is on same tile as player, stab goes through
+	for (int i = 0; i < numberOfEnemies; i++) {
+		if (p.pX <= e[i].eX + cellSize && p.pX >= e[i].eX - cellSize) {
+			if (p.pY >= e[i].eY - cellSize && p.pY <= e[i].eY + cellSize) {
+				enemyTakeDamage(i, 0);
+				//printf("enemy was stabbed\n");
+			}
+		}
+	}
+}
